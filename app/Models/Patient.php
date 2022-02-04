@@ -24,17 +24,19 @@ class Patient extends Model
     /**
      * @param object $parameters (Required): Containts the data to calculate the priority.
      */
-    public function priority($parameters = '')
+    public function priority()
     {
         if ($this->category == Patient::CHILD) {
+            $patient    = DB::table('childrens')->select('relation')->where('patient_id', $this->id)->get()[0];
+
             if ( $this->age >= 1 && $this->age <= 5 ) {
-                return ( $parameters->weight - $parameters->height ) + 3;
+                return $patient->relation + 3;
             
             } else if ( $this->age >= 6 && $this->age <= 12 ) {
-                return ( $parameters->weight - $parameters->height ) + 2;
+                return $patient->relation + 2;
 
             } else if ( $this->age >= 13 && $this->age <= 15 ) {
-                return ( $parameters->weight - $parameters->height ) + 1;
+                return $patient->relation + 1;
 
             }
 
@@ -53,6 +55,17 @@ class Patient extends Model
                 return $this->age / 30 + 3;
 
             }
+
+        }
+    }
+
+    public function risk()
+    {
+        if ( $this->category == Patient::OLDMAN ) {
+            return ( $this->age * $this->priority() ) / 100 + 5.3;
+
+        } else {
+            return ( $this->age * $this->priority() ) / 100;
 
         }
     }

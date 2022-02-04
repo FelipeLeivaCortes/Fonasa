@@ -96,9 +96,10 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Patient $patient)
     {
-        return 'Edit Patient '.$id;
+        $hospitals  = Hospital::all();
+        return view('patients.edit', compact('patient', 'hospitals'));
     }
 
     /**
@@ -108,9 +109,49 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Patient $patient)
     {
-        //
+        $request->validate([
+            'hospital_id'   => 'required',
+            'name'          => ['required', 'string', 'regex:/^[a-zA-ZÑñ\s]+$/'],
+            'age'           => ['required', 'regex:/^([1-9]{1}[0-9]{0,2})$/'],
+        ]);
+
+        # Child Category
+        if ( $request->age >= 1 && $request->age <= 15 ) {
+            $request->request->add(['category' => Patient::CHILD]);
+
+            $patient->update( $request->all() );
+            $relation   = $request->weight - $request->height;
+
+            DB::table('childrens')
+                ->where('patient_id', $patient->id)
+                ->update(['relation' => $relation]);
+
+        # Adult Category
+        } else if ( $request->age >= 16 && $request->age <= 40 ) {
+            $request->request->add(['category' => Patient::ADULT]);
+
+            $patient->update( $request->all() );
+            $time       = $request->time == null ? 0 : $request->time;
+
+            DB::table('adults')
+                ->where('patient_id', $patient->id)
+                ->update(['is_smoker'   => $request->is_smoker,
+                           'time'       => $time ]);
+
+        # Oldman Category
+        } else {
+            $request->request->add(['category' => Patient::OLDMAN]);
+
+            $patient->update( $request->all() );
+
+            DB::table('oldmans')
+                ->where('patient_id', $patient->id)
+                ->update(['has_diet'   => $request->has_diet]);
+        }
+
+        return redirect()->route('admin.patients.index')->with('success', 'Se han actualizado los datos del paciente exitosamente');
     }
 
     /**
@@ -119,9 +160,11 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
-        return 'Destroy Patient '. $id;
+        $patient->delete();
+
+        return redirect()->route('admin.patients.index')->with('success', 'Se ha eliminado el paciente exitosamente');
     }
 
     public function critical_patients()

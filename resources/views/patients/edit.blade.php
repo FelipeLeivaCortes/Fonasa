@@ -11,12 +11,12 @@
 
     <div class="card">
         <div class="card-body">
-            {!! Form::model($user, ['route' => ['admin.users.update', $user], 'method' => 'put']) !!}
-                @include('admin.users.partials.form')
+            {!! Form::model($patient, ['route' => ['admin.patients.update', $patient], 'method' => 'put']) !!}
+                @include('patients.partials.form')
 
                 <div class="d-flex justify-content-center mt-5">
                     <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-user-edit"></i> Actualizar Datos</button>
-                    <a href="{{route('admin.users.index')}}" class="btn btn-danger">Volver</a>
+                    <a href="{{route('admin.patients.index')}}" class="btn btn-danger">Volver</a>
                 </div>
             {!! Form::close() !!}
         </div>

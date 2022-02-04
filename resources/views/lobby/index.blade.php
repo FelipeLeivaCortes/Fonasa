@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Pacientes')
+@section('title', 'Hospitales')
 
 @section('content_header')
-    <h1>Pacientes Registrados</h1>
+    <h1>Sala de Espera</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,9 @@
 
     <div class="card">
         <div class="card-header">
-            <a href="{{route('admin.patients.create')}}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Registrar Paciente</a>
+            <a href="{{route('admin.lobby.critical_smokers')}}" class="btn btn-primary mr-2"><i class="fas fa-smoking"></i> Ver Fumadores Críticos</a>
+            
+            <a href="{{route('admin.lobby.oldest')}}" class="btn btn-primary mr-2"><i class="fas fa-male"></i> Paciente más anciano</a>
         </div>
 
         <div class="card-body">
@@ -20,25 +22,23 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Edad</th>
-                        <th colspan="3">Hospital</th>
+                        <th colspan="2">Edad</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        if  ( session('patients') ) {
+                            $patients   = session('patients');
+                        }
+                    @endphp
+
                     @forelse ($patients as $patient)
                         <tr>
                             <td>{{$patient->id}}</td>
                             <td>{{$patient->name}}</td>
                             <td>{{$patient->age}}</td>
-                            <td>{{$patient->hospital->name}}</td>
-                            <td width="10px">
-                                <a href="{{route('admin.patients.edit', $patient)}}" class="btn btn-info btn-sm">Editar</a>
-                            </td>
-                            <td width="10px">
-                                {!! Form::open(['route' => ['admin.patients.destroy', $patient], 'class' => 'confirm_action']) !!}
-                                @method('delete')
-                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger btn-sm']) !!}
-                                {!! Form::close() !!}
+                            <td width="15px">
+                                <button class="btn btn-info btn-sm">Atender</button>
                             </td>
                         </tr>
                     @empty
@@ -50,8 +50,4 @@
             </table>
         </div>
     </div>
-@stop
-
-@section('js')
-    <script src="{{asset('js/confirm_action.js')}}"></script>
 @stop

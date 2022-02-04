@@ -3,13 +3,15 @@
 @section('title', 'Hospitales')
 
 @section('content_header')
-    <h1>Lista de hospitales</h1>
+    <h1>Hospitales Registrados</h1>
 @stop
 
 @section('content')
+    @include('resources.alerts')
+
     <div class="card">
         <div class="card-header">
-
+            <a href="{{route('admin.hospitals.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar Hospital</a>
         </div>
 
         <div class="card-body">
@@ -28,12 +30,12 @@
                             <td>{{$hospital->name}}</td>
                             <td>{{$hospital->direction}}</td>
                             <td width="10px">
-                                <a href="{{route('admin.hospitals.edit', $hospital)}}" class="btn btn-info">Editar</a>
+                                <a href="{{route('admin.hospitals.edit', $hospital)}}" class="btn btn-info btn-sm">Editar</a>
                             </td>
                             <td width="10px">
-                                {!! Form::open(['route' => ['admin.hospitals.destroy', $hospital]]) !!}
+                                {!! Form::open(['route' => ['admin.hospitals.destroy', $hospital], 'class' => 'confirm_action']) !!}
                                 @method('delete')
-                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger btn-sm']) !!}
                                 {!! Form::close() !!}
                             </td>
                         </tr>
@@ -49,4 +51,5 @@
 @stop
 
 @section('js')
+    <script src="{{asset('js/confirm_action.js')}}"></script>
 @stop

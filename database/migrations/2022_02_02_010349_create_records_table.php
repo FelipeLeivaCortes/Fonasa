@@ -17,10 +17,10 @@ class CreateRecordsTable extends Migration
         Schema::create('records', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('hospital_id')->require();
-            $table->integer('patients')->require();
+            $table->integer('patients')->default(0);
             $table->string('professional')->require();
             $table->enum('type', [Record::TYPE_PEDIATRIA, Record::TYPE_URGENCIA, Record::TYPE_CGI]);
-            $table->enum('state', [Record::STATE_AWAITING, Record::STATE_OCUPPED]);
+            $table->enum('state', [Record::STATE_AWAITING, Record::STATE_OCUPPED])->default(Record::STATE_AWAITING);
             $table->timestamps();
 
             $table->foreign('hospital_id')->references('id')->on('hospitals')->onDelete('cascade');

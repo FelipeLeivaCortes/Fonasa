@@ -25,7 +25,7 @@ class HospitalController extends Controller
      */
     public function create()
     {
-        //
+        return view('hospitals.create');
     }
 
     /**
@@ -36,7 +36,14 @@ class HospitalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'      => ['required', 'regex:/^[a-zA-ZÑñ\s]+$/'],
+            'direction' => ['required', 'regex:/^[a-zA-ZÑñ\s]+$/'],
+        ]);
+
+        Hospital::create($request->all());
+
+        return redirect()->route('admin.hospitals.index')->with('success', 'Se ha agregado el hospital exitosamente');
     }
 
     /**
@@ -56,9 +63,9 @@ class HospitalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Hospital $hospital)
     {
-        return 'Edit the hospital '.$id;
+        return view('hospitals.edit', compact('hospital'));
     }
 
     /**
@@ -68,9 +75,16 @@ class HospitalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Hospital $hospital)
     {
-        //
+        $request->validate([
+            'name'      => ['required', 'regex:/^[a-zA-ZÑñ\s]+$/'],
+            'direction' => ['required', 'regex:/^[a-zA-ZÑñ\s]+$/'],
+        ]);
+
+        $hospital->update($request->all());
+
+        return redirect()->route('admin.hospitals.index')->with('success', 'Se han actualizado los datos hospital exitosamente');
     }
 
     /**
@@ -79,8 +93,9 @@ class HospitalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Hospital $hospital)
     {
-        return 'Destroy hospital '.$id;
+        $hospital->delete();
+        return redirect()->route('admin.hospitals.index')->with('success', 'Se ha eliminado el hospital exitosamente');
     }
 }

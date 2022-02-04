@@ -127,7 +127,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-dark-primary elevation-4 position-fixed',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -253,41 +253,34 @@ return [
         ],
 
         [
-            'text'    => 'Pacientes',
-            'icon'    => 'fas fa-users',
-            'submenu' => [
-                [
-                    'text' => 'Pacientes Críticos',
-                    'url'  => 'admin/critical_patients',
-                    'icon' => 'fas fa-fw fa-exclamation',
-                ],
-                [
-                    'text' => 'Pacientes Críticos',
-                    'url'  => 'admin/patients',
-                    'icon' => 'fas fa-fw fa-exclamation',
-                ],
-            ],
+            'text'        => 'Consultas',
+            'url'         => 'admin/records',
+            'icon'        => 'fas fa-clipboard',
+            'label_color' => 'success',
         ],
 
-
-
-
-
-
-
-
+        ['header' => 'ATENCIONES'],
 
         [
-            'text'    => 'Consultas',
-            'icon'    => 'fas fa-notes-medical',
-            'submenu' => [
-                [
-                    'text' => 'Pacientes Críticos',
-                    'url'  => 'admin/records',
-                    'icon' => 'fas fa-fw fa-exclamation',
-                ],
-            ],
+            'text'        => 'Sala de Espera',
+            'url'         => 'admin/lobby',
+            'icon'        => 'fas fa-clipboard',
+            'label_color' => 'success',
         ],
+
+
+
+        // [
+        //     'text'    => 'Consultas',
+        //     'icon'    => 'fas fa-notes-medical',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Pacientes Críticos',
+        //             'url'  => '',
+        //             'icon' => 'fas fa-fw fa-exclamation',
+        //         ],
+        //     ],
+        // ],
     ],
 
     /*
