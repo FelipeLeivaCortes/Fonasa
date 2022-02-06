@@ -13,6 +13,7 @@
         <div class="card-header">
             <a href="{{route('admin.records.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar Consulta</a>
             <a href="{{route('admin.records.unlock')}}" class="btn btn-primary"><i class="fas fa-unlock"></i> Liberar Consultas</a>
+            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#maxPatientsModal"><i class="fas fa-search"></i> Consulta con más pacientes</button>
         </div>
 
         <div class="card-body">
@@ -53,6 +54,39 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Max Patients Modal -->
+    <div class="modal fade" id="maxPatientsModal" tabindex="-1" role="dialog" aria-labelledby="maxPatientsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            {!! Form::open(['route' => 'admin.records.max_patients']) !!}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Filtrar consultas con más pacientes atendidos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {!! Form::label('hospital_id', 'Seleccione un hospital') !!}
+                            <select name="hospital_id" id="hospital_id" class="form-control">
+                                <option value="" disabled selected>Seleccione un hospital</option>
+                                @foreach ($hospitals as $hospital)
+                                    <option value="{{$hospital->id}}">{{$hospital->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        {!! Form::submit('Buscar', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                </div>
+            {!! Form::close() !!}
         </div>
     </div>
 @stop

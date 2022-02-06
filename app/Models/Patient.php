@@ -21,41 +21,64 @@ class Patient extends Model
         return $this->belongsTo(Hospital::class);
     }
 
+    public function category_name()
+    {
+        switch ( $this->category ){
+            case Patient::CHILD :
+                return Child::CATEGORY;
+            
+            case Patient::ADULT :
+                return Adult::CATEGORY;
+
+            case Patient::OLDMAN :
+                return Oldman::CATEGORY;
+
+        }
+    }
+
+    public function person()
+    {
+        switch ( $this->category ){
+            case Patient::CHILD :
+                return $this->hasOne(Child::class);
+
+            case Patient::ADULT :
+                return $this->hasOne(Adult::class);
+
+            case Patient::OLDMAN :
+                return $this->hasOne(Oldman::class);
+        }
+    }
+
     /**
      * @param object $parameters (Required): Containts the data to calculate the priority.
      */
     public function priority()
     {
-        if ($this->category == Patient::CHILD) {
-            $patient    = DB::table('childrens')->select('relation')->where('patient_id', $this->id)->get()[0];
+        switch ($this->category) {
+            case Patient::CHILD :
+                if ( $this->age >= 1 && $this->age <= 5 ) {
+                    return $this->person->relation + 3;
+                
+                } else if ( $this->age >= 6 && $this->age <= 12 ) {
+                    return $this->person->relation + 2;
+    
+                } else if ( $this->age >= 13 && $this->age <= 15 ) {
+                    return $this->person->relation + 1;
+    
+                }
 
-            if ( $this->age >= 1 && $this->age <= 5 ) {
-                return $patient->relation + 3;
-            
-            } else if ( $this->age >= 6 && $this->age <= 12 ) {
-                return $patient->relation + 2;
+            case Patient::ADULT :
+                return $this->person->is_smoker == 1 ? ( $this->person->time / 4 + 2 ) : 2;
 
-            } else if ( $this->age >= 13 && $this->age <= 15 ) {
-                return $patient->relation + 1;
-
-            }
-
-
-        } else if ($this->category == Patient::ADULT){
-            $patient    = DB::table('adults')->select('is_smoker', 'time')->where('patient_id', $this->id)->get()[0];
-            return $patient->is_smoker == 1 ? ( $patient->time / 4 + 2 ) : 2;
-
-        }else if ($this->category == Patient::OLDMAN){
-            $patient    = DB::table('oldmans')->select('has_diet')->where('patient_id', $this->id)->get()[0];
-
-            if ( $patient->has_diet && ( $this->age >= 60 && $this->age <= 100 ) ) {
-                return $this->age / 20 + 4;
-            
-            } else {
-                return $this->age / 30 + 3;
-
-            }
-
+            case Patient::OLDMAN :
+                if ( $this->person->has_diet && ( $this->age >= 60 && $this->age <= 100 ) ) {
+                    return $this->age / 20 + 4;
+                
+                } else {
+                    return $this->age / 30 + 3;
+    
+                }
         }
     }
 

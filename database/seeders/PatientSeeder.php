@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Adult;
+use App\Models\Child;
 use App\Models\Hospital;
+use App\Models\Oldman;
 use App\Models\Patient;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -21,45 +24,61 @@ class PatientSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         for ($i=0; $i < 50; $i++) {
-            $category   = Arr::random([Patient::CHILD, Patient::ADULT, Patient::OLDMAN]);
-            $age        = 0;
-
-            if ($category == Patient::CHILD) {
-                $age    = mt_rand(1, 15);
-            
-            } else if ($category == Patient::ADULT) {
-                $age    = mt_rand(16, 40);
-
-            } else {
-                $age    = mt_rand(41, 100);
-
-            }
-
             $patient    = Patient::create([
-                'hospital_id'   => Hospital::all()->random()->id,
-                'name'          => $faker->name(),
-                'age'           => $age,
-                'category'      => $category,
+                'hospital_id'       => Hospital::all()->random()->id,
+                'name'              => $faker->name(),
+                'age'               => 0,
+                'category'          => 1,
+                'noHistoriaClinica' => rand(0, 10),
             ]);
+            
+            $category   = Arr::random([Patient::CHILD, Patient::ADULT, Patient::OLDMAN]);
 
-            if ( $category == Patient::CHILD ) {
-                DB::insert('insert into childrens (patient_id, relation) values (?, ?)', [$patient->id, mt_rand(1, 4) ]);
+            switch ($category) {
+                case Patient::CHILD :
+                    $patient->update([
+                        'age'       => mt_rand(Child::MIN_AGE, Child::MAX_AGE),
+                        'category'  => $category,
+                    ]);
 
-            } else if ( $category == Patient::ADULT ) {
-                $is_smoker  = rand(0, 1);
+                    Child::create([
+                        'patient_id'    => $patient->id,
+                        'relation'      => mt_rand(1, 4),
+                    ]);
 
-                if ( $is_smoker ) {
-                    DB::insert('insert into adults (patient_id, is_smoker, time) values (?, ?, ?)', [$patient->id, 1, mt_rand(1, $patient->age) ]);
+                    break;
 
-                } else {
-                    DB::insert('insert into adults (patient_id, is_smoker, time) values (?, ?, ?)', [$patient->id, 0, 0]);
+                case Patient::ADULT :
+                    $patient->update([
+                        'age'       => mt_rand(Adult::MIN_AGE, Adult::MAX_AGE),
+                        'category'  => $category,
+                    ]);
 
-                }
+                    $is_smoker  = rand(0, 1);
+                    $time       = $is_smoker ? mt_rand(1, $patient->age - 10) : 0;
 
-            } else {
-                DB::insert('insert into oldmans (patient_id, has_diet) values (?, ?)', [$patient->id, rand(0, 1)] );
+                    Adult::create([
+                        'patient_id'    => $patient->id,
+                        'is_smoker'     => $is_smoker,
+                        'time'          => $time,
+                    ]);
 
+                    break;
+
+                case Patient::OLDMAN :
+                    $patient->update([
+                        'age'       => mt_rand(Oldman::MIN_AGE, Oldman::MAX_AGE),
+                        'category'  => $category,
+                    ]);
+
+                    Oldman::create([
+                        'patient_id'    => $patient->id,
+                        'has_diet'      => rand(0, 1),
+                    ]);
+
+                    break;
             }
+
         }
     }
 }

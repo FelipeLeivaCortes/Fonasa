@@ -31,12 +31,18 @@ Route::resource('/admin/patients', PatientController::class)->names('admin.patie
 
 Route::get('/admin/records/unlock', [RecordController::class, 'unlock'])->name('admin.records.unlock');
 
+Route::post('/admin/records/max_patients', [RecordController::class, 'max_patients'])->name('admin.records.max_patients');
+
 Route::resource('/admin/records', RecordController::class)->names('admin.records');
 
 Route::get('/admin/lobby', [LobbyController::class, 'index'])->name('admin.lobby.index');
 
+Route::post('/admin/lobby/get_data', [LobbyController::class, 'get_data'])->name('admin.lobby.get_data');
+
 Route::get('/admin/lobby/oldest', [LobbyController::class, 'oldest'])->name('admin.lobby.oldest');
 
-Route::get('/admin/lobby/childs', [LobbyController::class, 'get_childs'])->name('admin.lobby.childs');
+Route::post('/admin/lobby/critical_smokers', [LobbyController::class, 'critical_smokers'])->name('admin.lobby.critical_smokers');
 
-Route::get('/admin/lobby/critical_smokers', [LobbyController::class, 'critical_smokers'])->name('admin.lobby.critical_smokers');
+Route::get('/admin/lobby/attend_patient', [LobbyController::class, 'attend_patient'])->name('admin.lobby.attend_patient');
+
+Route::post('/admin/lobby/riskiest_patients', [LobbyController::class, 'riskiest_patients'])->name('admin.lobby.riskiest_patients');

@@ -2,58 +2,147 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hospital;
 use App\Models\Patient;
-use App\Models\Record;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LobbyController extends Controller
 {
     public function index()
     {
-        $childs = $adults = $oldmans = array();
-        $patients   = Patient::all();
-        $records    = Record::all()->where('state', Record::STATE_AWAITING);
+        $patients   = [];
+        $records    = [];
+        $hospitals  = Hospital::all();
 
-        return view('lobby.index', compact('patients', 'records'));
+        return view('lobby.index', compact('patients', 'hospitals', 'records'));
     }
 
-    public function oldest()
+    public function get_data(Request $request)
     {
-        $patients    = Patient::orderBy('age', 'desc')->take(1)->get();
-
-        return back()->with('patients', $patients);
-    }
-
-    public function get_childs()
-    {
-        $patients   = Patient::all()->where('category', Patient::CHILD);
-
-        return back()->with('patients', $patients);
-    }
-
-    public function critical_smokers()
-    {
-        $smokers    = DB::table('adults')->select('patient_id')->where('is_smoker', 1)->get();
+        $hospital   = Hospital::find($request->hospital_id);
+        $unsorted   = $hospital->patients;
         $patients   = array();
+        $stack      = array();
 
-        foreach ( $smokers as $smoker ) {
-            $patient    = Patient::find( $smoker->patient_id );
+        foreach ( $unsorted as $patient ) {
+            $patient->priority  = round($patient->priority(), 3);
+            $patient->risk      = round($patient->risk(), 3);
 
-            if ( sizeof($patients) == 0 ) {
-                array_push( $patients, $patient );
-            
-            } else {
-                for ($i=0; $i < sizeof($patients); $i++) {
-                    if ( $patient->priority() > $patients[$i]->priority() ) {
-                         
+            $limit      = sizeof($patients);
+            $counter    = 0;
 
-                    }
+            for ($i = $limit - 1; $i >= 0; $i-- ) {
+                if ( $patient->priority > $patients[$i]->priority ) {
+                    array_push($stack, array_pop($patients));
+                    $counter++;
 
+                } else {
+                    break;
+                    
                 }
+            }
+
+            array_push($patients, $patient);
+
+            for ($j=0; $j < $counter; $j++) { 
+                array_push($patients, array_pop($stack) );
             }
         }
 
-        return $patients;
+        return back()->with('patients', $patients)
+                    ->with('hospital', $hospital);
+    }
+
+    public function critical_smokers(Request $request)
+    {
+
+        $hospital   = Hospital::find($request->hospital_id);
+        $adults     = $hospital->patients->where('category', Patient::ADULT);
+        $unsorted   = array();
+
+        foreach ($adults as $adult) {
+            if ( $adult->person->is_smoker ) {
+                array_push($unsorted, $adult);
+            }
+        }
+
+        $patients   = array();
+        $stack      = array();
+
+        foreach ( $unsorted as $patient ) {
+            $patient->priority  = round($patient->priority(), 3);
+            $patient->risk      = round($patient->risk(), 3);
+
+            $limit      = sizeof($patients);
+            $counter    = 0;
+
+            for ($i = $limit - 1; $i >= 0; $i-- ) {
+                if ( $patient->risk > $patients[$i]->risk ) {
+                    array_push($stack, array_pop($patients));
+                    $counter++;
+
+                } else {
+                    break;
+                    
+                }
+            }
+
+            array_push($patients, $patient);
+
+            for ($j=0; $j < $counter; $j++) { 
+                array_push($patients, array_pop($stack) );
+            }
+        }
+
+        return back()->with('patients', $patients)
+                    ->with('hospital', $hospital);
+    }
+
+    public function riskiest_patients(Request $request)
+    {
+        $hospital   = Hospital::find($request->hospital_id);
+        $unsorted   = $hospital->patients->where('noHistoriaClinica', '>=', $request->no_clinical);
+    
+        $patients   = array();
+        $stack      = array();
+
+        foreach ( $unsorted as $patient ) {
+            $patient->priority  = round($patient->priority(), 3);
+            $patient->risk      = round($patient->risk(), 3);
+
+            $limit      = sizeof($patients);
+            $counter    = 0;
+
+            for ($i = $limit - 1; $i >= 0; $i-- ) {
+                if ( $patient->risk > $patients[$i]->risk ) {
+                    array_push($stack, array_pop($patients));
+                    $counter++;
+
+                } else {
+                    break;
+                    
+                }
+            }
+
+            array_push($patients, $patient);
+
+            for ($j=0; $j < $counter; $j++) { 
+                array_push($patients, array_pop($stack) );
+            }
+        }
+
+        if ( sizeof($patients) == 0 ) {
+            return back()->with('info', 'No se han encontrado pacientes con un historial clínico superior a '.$request->no_clinical);
+
+        } else {
+            return back()->with('patients', $patients)
+                    ->with('hospital', $hospital);
+
+        }
+    }
+
+    public function attend_patient(Request $request)
+    {
+        return $request;
     }
 }

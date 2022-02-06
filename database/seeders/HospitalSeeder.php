@@ -14,9 +14,16 @@ class HospitalSeeder extends Seeder
      */
     public function run()
     {
-        Hospital::create([
-            'name'      => 'Hospital Sótero del Rio',
-            'direction' => 'Av. Libertad 777',
-        ]);
+        /**
+         * Creating 5 hospitals like test
+         */
+        $postfix    = ['A', 'B', 'C', 'D', 'E'];
+
+        for ($i=0; $i < 5; $i++) { 
+            Hospital::create([
+                'name'      => 'Hospital '.$postfix[$i],
+                'direction' => 'Dirección '.$postfix[$i],
+            ]);
+        }
     }
 }

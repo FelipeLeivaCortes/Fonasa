@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChildrensTable extends Migration
+class CreateOldmenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateChildrensTable extends Migration
      */
     public function up()
     {
-        Schema::create('childrens', function (Blueprint $table) {
+        Schema::create('oldmen', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id')->require();
-            $table->integer('relation');
+            $table->boolean('has_diet');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
@@ -30,6 +30,6 @@ class CreateChildrensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('childrens');
+        Schema::dropIfExists('oldmen');
     }
 }

@@ -19,6 +19,7 @@ class CreatePatientsTable extends Migration
             $table->unsignedBigInteger('hospital_id')->require();
             $table->string('name')->require();
             $table->integer('age')->require();
+            $table->integer('noHistoriaClinica')->default(0);
             $table->enum('category', [Patient::CHILD, Patient::ADULT, Patient::OLDMAN]);
             $table->timestamps();
 

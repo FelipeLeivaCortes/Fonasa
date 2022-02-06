@@ -20,6 +20,7 @@ class RecordFactory extends Factory
             'hospital_id'   => Hospital::all()->random()->id,
             'professional'  => $this->faker->name(),
             'type'          => Arr::random([Record::TYPE_PEDIATRIA, Record::TYPE_URGENCIA, Record::TYPE_CGI]),
+            'patients'      => rand(0, 100),
         ];
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adult;
+use App\Models\Child;
 use App\Models\Hospital;
+use App\Models\Oldman;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,36 +48,40 @@ class PatientController extends Controller
             'age'           => ['required', 'regex:/^([1-9]{1}[0-9]{0,2})$/'],
         ]);
 
-        # Child Category
+        // Child Category
         if ( $request->age >= 1 && $request->age <= 15 ) {
             $request->request->add(['category' => Patient::CHILD]);
 
             $patient    = Patient::create( $request->all() );
-            $relation   = $request->weight - $request->height;
 
-            DB::insert('insert into childrens (patient_id, relation) values (?, ?)', [$patient->id, $relation]);
+            Child::create([
+                'patient_id'    => $patient->id,
+                'relation'      => $request->weight - $request->height,
+            ]);
 
-        # Adult Category
+        // Adult Category
         } else if ( $request->age >= 16 && $request->age <= 40 ) {
             $request->request->add(['category' => Patient::ADULT]);
 
             $patient    = Patient::create( $request->all() );
-            $time       = $request->time == null ? 0 : $request->time;
+            $time       = $request->is_smoker ? $request->time : 0;
 
-            DB::insert('insert into adults (patient_id, is_smoker, time) values (?, ?, ?)',
-                        [$patient->id, $request->is_smoker, $time]
-            );
+            Adult::create([
+                'patient_id'    => $patient->id,
+                'is_smoker'     => $request->is_smoker,
+                'time'          => $time,
+            ]);
 
-        # Oldman Category
+        // Oldman Category
         } else {
             $request->request->add(['category' => Patient::OLDMAN]);
 
             $patient    = Patient::create( $request->all() );
 
-            DB::insert('insert into oldmans (patient_id, has_diet) values (?, ?)',
-                        [$patient->id, $request->has_diet]
-            );
-
+            Oldman::create([
+                'patient_id'    => $patient->id,
+                'has_diet'      => $request->has_diet,
+            ]);
         }
 
         return redirect()->route('admin.patients.index')->with('success', 'Se ha agregado el paciente exitosamente');
@@ -117,38 +124,36 @@ class PatientController extends Controller
             'age'           => ['required', 'regex:/^([1-9]{1}[0-9]{0,2})$/'],
         ]);
 
-        # Child Category
+        // Child Category
         if ( $request->age >= 1 && $request->age <= 15 ) {
             $request->request->add(['category' => Patient::CHILD]);
 
             $patient->update( $request->all() );
-            $relation   = $request->weight - $request->height;
+            $patient->person->update([
+                'relation'      => $request->weight - $request->height,
+            ]);
 
-            DB::table('childrens')
-                ->where('patient_id', $patient->id)
-                ->update(['relation' => $relation]);
-
-        # Adult Category
+        // Adult Category
         } else if ( $request->age >= 16 && $request->age <= 40 ) {
             $request->request->add(['category' => Patient::ADULT]);
 
             $patient->update( $request->all() );
-            $time       = $request->time == null ? 0 : $request->time;
+            $time       = $request->is_smoker ? $request->time : 0;
+            
+            $patient->person->update([
+                'is_smoker'     => $request->is_smoker,
+                'time'          => $time,
+            ]);
 
-            DB::table('adults')
-                ->where('patient_id', $patient->id)
-                ->update(['is_smoker'   => $request->is_smoker,
-                           'time'       => $time ]);
-
-        # Oldman Category
+        // Oldman Category
         } else {
             $request->request->add(['category' => Patient::OLDMAN]);
 
             $patient->update( $request->all() );
+            $patient->person->update([
+                'has_diet'      => $request->has_diet,
+            ]);
 
-            DB::table('oldmans')
-                ->where('patient_id', $patient->id)
-                ->update(['has_diet'   => $request->has_diet]);
         }
 
         return redirect()->route('admin.patients.index')->with('success', 'Se han actualizado los datos del paciente exitosamente');
@@ -165,10 +170,5 @@ class PatientController extends Controller
         $patient->delete();
 
         return redirect()->route('admin.patients.index')->with('success', 'Se ha eliminado el paciente exitosamente');
-    }
-
-    public function critical_patients()
-    {
-        return 'OK';
     }
 }

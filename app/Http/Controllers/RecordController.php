@@ -15,8 +15,9 @@ class RecordController extends Controller
      */
     public function index()
     {
+        $hospitals  = Hospital::all();
         $records    = Record::all();
-        return view('records.index', compact('records'));
+        return view('records.index', compact('hospitals', 'records'));
     }
 
     /**
@@ -115,6 +116,27 @@ class RecordController extends Controller
             $record->update(['state' => Record::STATE_AWAITING]);
         }
 
-        return redirect()->route('admin.records.index')->with('success', 'Se han libeado todas las consultas exitosamente');
+        return redirect()->route('admin.records.index')->with('success', 'Se han liberado todas las consultas exitosamente');
     }
+
+    public function max_patients(Request $request)
+    {
+        $hospital   = Hospital::find($request->hospital_id);
+        $records    = $hospital->records;
+
+        if ( sizeof($records) == 0 ) {
+            return back()->with('error', 'No se han encontrado consultas asociadas al hospital '.$hospital->name);
+        
+        } else {
+            $record = (object) array('patients' => 0);
+
+            foreach ( $records as $element ) {
+                if ( $element->patients > $record->patients ) {
+                    $record = $element;
+                }
+            }
+
+            return view('records.show', compact('record', 'hospital'));
+        }
+     }
 }

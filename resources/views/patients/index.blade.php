@@ -21,6 +21,7 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Edad</th>
+                        <th>Categoria</th>
                         <th colspan="3">Hospital</th>
                     </tr>
                 </thead>
@@ -30,6 +31,7 @@
                             <td>{{$patient->id}}</td>
                             <td>{{$patient->name}}</td>
                             <td>{{$patient->age}}</td>
+                            <td>{{$patient->category_name()}}</td>
                             <td>{{$patient->hospital->name}}</td>
                             <td width="10px">
                                 <a href="{{route('admin.patients.edit', $patient)}}" class="btn btn-info btn-sm">Editar</a>
