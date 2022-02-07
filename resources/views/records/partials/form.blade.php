@@ -23,5 +23,5 @@
 </div>
 
 <div class="form-group">
-    <small>* Nota: Tenga en consideración que, por defecto, una consulta nueva tendrá la cantidad de pacientes en "0" y el estado "Espera"</small>
+    <small>* Nota: Tenga en consideración que, por defecto, una consulta nueva tendrá la cantidad de pacientes en "0" y el estado "Disponible"</small>
 </div>

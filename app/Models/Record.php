@@ -12,7 +12,7 @@ class Record extends Model
     protected $guarded  = ['id'];
 
     const STATE_OCUPPED     = 'Ocupada';
-    const STATE_AWAITING    = 'En Espera';
+    const STATE_AVAILABLE   = 'Disponible';
 
     const TYPE_PEDIATRIA    = 'Pediatría';
     const TYPE_URGENCIA     = 'Urgencia';

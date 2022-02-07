@@ -21,6 +21,7 @@ class CreatePatientsTable extends Migration
             $table->integer('age')->require();
             $table->integer('noHistoriaClinica')->default(0);
             $table->enum('category', [Patient::CHILD, Patient::ADULT, Patient::OLDMAN]);
+            $table->enum('state', [Patient::IN_LOBBY, Patient::AWAITING, Patient::ATTENDED])->default(Patient::IN_LOBBY);
             $table->timestamps();
 
             $table->foreign('hospital_id')->references('id')->on('hospitals')->onDelete('cascade');

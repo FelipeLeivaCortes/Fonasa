@@ -262,25 +262,18 @@ return [
         ['header' => 'ATENCIONES'],
 
         [
-            'text'        => 'Sala de Espera',
+            'text'        => 'Sala de Pendientes',
             'url'         => 'admin/lobby',
             'icon'        => 'fas fa-clipboard',
             'label_color' => 'success',
         ],
 
-
-
-        // [
-        //     'text'    => 'Consultas',
-        //     'icon'    => 'fas fa-notes-medical',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Pacientes Críticos',
-        //             'url'  => '',
-        //             'icon' => 'fas fa-fw fa-exclamation',
-        //         ],
-        //     ],
-        // ],
+        [
+            'text'        => 'Sala de Espera',
+            'url'         => 'admin/awaiting_room',
+            'icon'        => 'fas fa-user-clock',
+            'label_color' => 'success',
+        ],
     ],
 
     /*

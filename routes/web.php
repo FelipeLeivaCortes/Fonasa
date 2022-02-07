@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AwaitingRoomController;
 use App\Http\Controllers\HospitalController;
 use App\Http\Controllers\LobbyController;
 use App\Http\Controllers\PatientController;
@@ -39,10 +40,18 @@ Route::get('/admin/lobby', [LobbyController::class, 'index'])->name('admin.lobby
 
 Route::post('/admin/lobby/get_data', [LobbyController::class, 'get_data'])->name('admin.lobby.get_data');
 
-Route::get('/admin/lobby/oldest', [LobbyController::class, 'oldest'])->name('admin.lobby.oldest');
+Route::post('/admin/lobby/get_records', [LobbyController::class, 'get_records'])->name('admin.lobby.get_records');
 
 Route::post('/admin/lobby/critical_smokers', [LobbyController::class, 'critical_smokers'])->name('admin.lobby.critical_smokers');
 
-Route::get('/admin/lobby/attend_patient', [LobbyController::class, 'attend_patient'])->name('admin.lobby.attend_patient');
+Route::post('/admin/lobby/optimize_attendance', [LobbyController::class, 'optimize_attendance'])->name('admin.lobby.optimize_attendance');
+
+Route::post('/admin/lobby/attend_patient', [LobbyController::class, 'attend_patient'])->name('admin.lobby.attend_patient');
 
 Route::post('/admin/lobby/riskiest_patients', [LobbyController::class, 'riskiest_patients'])->name('admin.lobby.riskiest_patients');
+
+Route::get('/admin/awaiting_room', [AwaitingRoomController::class, 'index'])->name('admin.awaiting_room');
+
+Route::post('/admin/awaiting_room/get_data', [AwaitingRoomController::class, 'get_data'])->name('admin.awaiting_room.get_data');
+
+Route::post('/admin/awaiting_room/get_records', [AwaitingRoomController::class, 'get_records'])->name('admin.awaiting_room.get_records');

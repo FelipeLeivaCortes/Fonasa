@@ -20,7 +20,7 @@ class CreateRecordsTable extends Migration
             $table->integer('patients')->default(0);
             $table->string('professional')->require();
             $table->enum('type', [Record::TYPE_PEDIATRIA, Record::TYPE_URGENCIA, Record::TYPE_CGI]);
-            $table->enum('state', [Record::STATE_AWAITING, Record::STATE_OCUPPED])->default(Record::STATE_AWAITING);
+            $table->enum('state', [Record::STATE_AVAILABLE, Record::STATE_OCUPPED])->default(Record::STATE_AVAILABLE);
             $table->timestamps();
 
             $table->foreign('hospital_id')->references('id')->on('hospitals')->onDelete('cascade');

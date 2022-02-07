@@ -16,6 +16,10 @@ class Patient extends Model
     const ADULT     = '2';
     const OLDMAN    = '3';
 
+    const IN_LOBBY  = 'En sala de espera';
+    const AWAITING  = 'En sala de pacientes';
+    const ATTENDED  = 'Atentido';
+
     public function hospital()
     {
         return $this->belongsTo(Hospital::class);
