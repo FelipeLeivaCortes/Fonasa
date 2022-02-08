@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Hospitales')
+@section('title', 'Sala de Espera')
 
 @section('content_header')
     <h1>Sala de Espera</h1>
@@ -49,6 +49,8 @@
                     <button id="btn_attend" class="btn btn-primary btn-sm mr-2" onclick="attend_pending_patients({{$hospital->id}})">Atender Paciente</button>
                 </div>
             </div>
+
+            <small>* Nota: Toda atención considera al primer paciente de la lista</small>
         </div>
     </div>
 
@@ -94,7 +96,7 @@
     <div class="modal fade" id="attendPatientModal" tabindex="-1" role="dialog" aria-labelledby="attendPatientModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
-            {!! Form::open(['route' => 'admin.lobby.attend_patient']) !!}
+            {!! Form::open(['route' => 'admin.awaiting_room.attend_patient']) !!}
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Datos del paciente</h5>
@@ -132,13 +134,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="record_id">Riesgo</label>
+                            <label for="record_type">Tipo Consulta</label>
+                            <p class="form-control" id="record_type"></p>                       
+                        </div>
+
+                        <div class="form-group">
+                            <label for="record_id">Profesional</label>
                             <select name="record_id" id="record_id" class="form-control" required>
                                 <option value="" disabled selected>Seleccione una consulta</option>
                             </select>
                         </div>
-                        
-                        <small>* NOTA: La atención al paciente considera al primer pacienta en la lista de espera</small>
                     </div>
 
                     <div class="modal-footer">
@@ -149,6 +154,8 @@
             {!! Form::close() !!}
         </div>
     </div>
-
-    <script src="{{asset('js/lobby_controller.js')}}"></script>
 @stop
+
+@section('js_custom')
+    <script src="{{asset('js/lobby_controller.js')}}"></script>
+@endsection

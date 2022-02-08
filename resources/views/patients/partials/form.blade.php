@@ -2,7 +2,7 @@
 <div class="form-group">
     {!! Form::label('hospital_id', 'Hospital') !!}
     <select class="form-control" name="hospital_id" id="hospital_id">
-        @foreach ( $hospitals as $hospital )
+        @foreach ($hospitals as $hospital)
             <option value="{{ $hospital->id }}">{{ $hospital->name }}</option>
         @endforeach
     </select>
@@ -17,6 +17,18 @@
     {!! Form::label('age', 'Edad') !!}
     {!! Form::number('age', null, ['class' => 'form-control', 'placeholder' => 'Ingrese edad del paciente']) !!}
 </div>
+
+@isset($patient)
+    {!! Form::label('state', 'Estado Actual') !!}
+    <select class="form-control" name="state" id="state" required>
+        <option value="" disabled selected>Seleccione un estado</option>
+        @foreach ( $states as $state )
+            <option value="{{ $state }}">{{ $state }}</option>
+        @endforeach
+    </select>
+
+    <small>* Nota: Este campo sólo se incluye para comprobrar el reingreso del paciente a una nueva consulta</small>
+@endisset
 
 <!-- Child Container -->
 <div class="d-none" id="child_container">

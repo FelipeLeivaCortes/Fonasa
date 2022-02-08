@@ -18,7 +18,7 @@ class Patient extends Model
 
     const IN_LOBBY  = 'En sala de espera';
     const AWAITING  = 'En sala de pacientes';
-    const ATTENDED  = 'Atentido';
+    const ATTENDED  = 'Atendido';
 
     public function hospital()
     {

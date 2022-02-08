@@ -23,7 +23,7 @@ class LobbyController extends Controller
         $unsorted   = $hospital->patients->where('state', Patient::IN_LOBBY);
 
         if ( sizeof($unsorted) == 0 ) {
-            return back()->with('info', 'No se han encontrado pacientes registrados en el hospital '.$hospital->name);
+            return back()->with('info', 'No se han encontrado pacientes pendientes en el hospital '.$hospital->name);
         
         } else {
             $patients   = array();
@@ -310,6 +310,6 @@ class LobbyController extends Controller
             'patients'  => ($record->patients + 1),
         ]);
 
-        return redirect()->route('admin.lobby.index')->with('success', 'Se ha registrado el paciente con consulta exitosamente');
+        return redirect()->route('admin.lobby.index')->with('success', 'El paciente ha sido recepcionado por el profesional exitosamente');
     }
 }

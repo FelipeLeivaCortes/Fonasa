@@ -22,6 +22,18 @@
     </select>
 </div>
 
+@isset($record)
+    <div class="form-group">
+        {!! Form::label('type', 'Estado de la consulta') !!}
+        <select class="form-control" name="state" id="state" required>
+            <option value="" selected disabled>Seleccione Estado</option>
+            @foreach ( $states as $state )
+                <option value="{{ $state }}">{{ $state }}</option>
+            @endforeach
+        </select>
+    </div>
+@endisset
+
 <div class="form-group">
     <small>* Nota: Tenga en consideración que, por defecto, una consulta nueva tendrá la cantidad de pacientes en "0" y el estado "Disponible"</small>
 </div>

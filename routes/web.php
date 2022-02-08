@@ -5,6 +5,7 @@ use App\Http\Controllers\HospitalController;
 use App\Http\Controllers\LobbyController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RecordController;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,14 +20,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('admin');
+    return redirect()->route('admin.hospitals.index');
 });
 
-Route::get('/admin', function () {
-    return view('index');
-})->name('admin');
+
+/**
+ * Hospital Controller
+ */
 
 Route::resource('/admin/hospitals', HospitalController::class)->names('admin.hospitals');
+
+
+
+/**
+ * Patient Controller
+ */
 
 Route::resource('/admin/patients', PatientController::class)->names('admin.patients');
 
@@ -35,6 +43,11 @@ Route::get('/admin/records/unlock', [RecordController::class, 'unlock'])->name('
 Route::post('/admin/records/max_patients', [RecordController::class, 'max_patients'])->name('admin.records.max_patients');
 
 Route::resource('/admin/records', RecordController::class)->names('admin.records');
+
+
+/**
+ * Control Over The Pending Patients
+ */
 
 Route::get('/admin/lobby', [LobbyController::class, 'index'])->name('admin.lobby.index');
 
@@ -50,8 +63,16 @@ Route::post('/admin/lobby/attend_patient', [LobbyController::class, 'attend_pati
 
 Route::post('/admin/lobby/riskiest_patients', [LobbyController::class, 'riskiest_patients'])->name('admin.lobby.riskiest_patients');
 
-Route::get('/admin/awaiting_room', [AwaitingRoomController::class, 'index'])->name('admin.awaiting_room');
+
+
+/**
+ * Control Over The Awaiting Room
+ */
+
+Route::get('/admin/awaiting_room', [AwaitingRoomController::class, 'index'])->name('admin.awaiting_room.index');
 
 Route::post('/admin/awaiting_room/get_data', [AwaitingRoomController::class, 'get_data'])->name('admin.awaiting_room.get_data');
 
 Route::post('/admin/awaiting_room/get_records', [AwaitingRoomController::class, 'get_records'])->name('admin.awaiting_room.get_records');
+
+Route::post('/admin/awaiting_room/attend_patient', [AwaitingRoomController::class, 'attend_patient'])->name('admin.awaiting_room.attend_patient');

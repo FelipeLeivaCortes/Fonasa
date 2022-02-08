@@ -75,6 +75,8 @@
                     {!! Form::close() !!}
                 </div>
             </div>
+
+            <small>* Nota: Toda atención considera al primer paciente de la lista</small>
         </div>
     </div>
 
@@ -158,13 +160,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="record_id">Riesgo</label>
+                            <label for="record_type">Tipo Consulta</label>
+                            <p class="form-control" id="record_type"></p>                       
+                        </div>
+
+                        <div class="form-group">
+                            <label for="record_id">Profesional</label>
                             <select name="record_id" id="record_id" class="form-control" required>
                                 <option value="" disabled selected>Seleccione una consulta</option>
                             </select>
                         </div>
-                        
-                        <small>* NOTA: La atención al paciente considera al primer pacienta en la lista de espera</small>
                     </div>
 
                     <div class="modal-footer">
@@ -205,6 +210,8 @@
             {!! Form::close() !!}
         </div>
     </div>
+@stop
 
+@section('js_custom')
     <script src="{{asset('js/lobby_controller.js')}}"></script>
 @stop

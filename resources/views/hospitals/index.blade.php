@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Hospitales')
+@section('title', 'Hospitales Registrados')
 
 @section('content_header')
     <h1>Hospitales Registrados</h1>
@@ -11,7 +11,7 @@
 
     <div class="card">
         <div class="card-header">
-            <a href="{{route('admin.hospitals.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar Hospital</a>
+            <a href="{{route('admin.hospitals.create')}}" class="btn btn-primary btn-sm">Agregar Hospital</a>
         </div>
 
         <div class="card-body">
@@ -33,7 +33,7 @@
                                 <a href="{{route('admin.hospitals.edit', $hospital)}}" class="btn btn-info btn-sm">Editar</a>
                             </td>
                             <td width="10px">
-                                {!! Form::open(['route' => ['admin.hospitals.destroy', $hospital], 'class' => 'confirm_action']) !!}
+                                {!! Form::open(['route' => ['admin.hospitals.destroy', $hospital], 'class' => 'delete_hospital']) !!}
                                 @method('delete')
                                     {!! Form::submit('Eliminar', ['class' => 'btn btn-danger btn-sm']) !!}
                                 {!! Form::close() !!}
@@ -50,6 +50,6 @@
     </div>
 @stop
 
-@section('js')
-    <script src="{{asset('js/confirm_action.js')}}"></script>
+@section('js_custom')
+    <script src="{{asset('js/confirm_actions.js')}}"></script>
 @stop

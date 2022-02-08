@@ -17,9 +17,10 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $patients   = Patient::all();
+
         return view('patients.index',  compact('patients'));
     }
 
@@ -28,7 +29,7 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $hospitals  = Hospital::all();
         return view('patients.create', compact('hospitals'));
@@ -106,7 +107,8 @@ class PatientController extends Controller
     public function edit(Patient $patient)
     {
         $hospitals  = Hospital::all();
-        return view('patients.edit', compact('patient', 'hospitals'));
+        $states     = [Patient::IN_LOBBY, Patient::AWAITING, Patient::ATTENDED];
+        return view('patients.edit', compact('patient', 'hospitals', 'states'));
     }
 
     /**

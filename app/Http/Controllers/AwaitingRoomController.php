@@ -88,4 +88,20 @@ class AwaitingRoomController extends Controller
 
         return $data;
     }
+
+    public function attend_patient(Request $request)
+    {
+        $patient    = Patient::find($request->patient_id);
+        $patient->update([
+            'state'     => Patient::ATTENDED,
+        ]);
+
+        $record = Record::find($request->record_id);
+        $record->update([
+            'state'     => Record::STATE_OCUPPED,
+            'patients'  => ($record->patients + 1),
+        ]);
+
+        return redirect()->route('admin.awaiting_room.index')->with('success', 'El paciente ha sido recepcionado por el profesional exitosamente');
+    }
 }

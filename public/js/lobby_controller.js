@@ -1,48 +1,40 @@
 
-/**
- * Controlling events once the page has patients
- */
-setTimeout(()=>{
-    $(document).ready(function(){
-        $('#hospital_id').change(function(){
-            $('#btn_search').removeAttr('disabled');
+$('#hospital_id').change(function(){
+    $('#btn_search').removeAttr('disabled');
+});
+
+$('#btn_oldest').click(function(){
+    if ( $(this).hasClass('btn-primary') ){
+        var ages    = [];
+        var ids     = [];
+
+        $('tbody tr').each(function(){
+            ids.push($(this).attr('id'));
+            ages.push( $(this).find('td').eq(2).html() );
         });
-    });
 
-    $('#btn_oldest').click(function(){
-        if ( $(this).hasClass('btn-primary') ){
-            var ages    = [];
-            var ids     = [];
-
-            $('tbody tr').each(function(){
-                ids.push($(this).attr('id'));
-                ages.push( $(this).find('td').eq(2).html() );
-            });
-
-            for ( i=0; i<ages.length; i++ ) {
-                if ( ages[i] != Math.max.apply(null, ages) ) {
-                    $( eval('"#' + ids[i] + '"') ).addClass('d-none');
-                    $( eval('"#' + ids[i] + '"') ).removeClass('waiting');
-                }
+        for ( i=0; i<ages.length; i++ ) {
+            if ( ages[i] != Math.max.apply(null, ages) ) {
+                $( eval('"#' + ids[i] + '"') ).addClass('d-none');
+                $( eval('"#' + ids[i] + '"') ).removeClass('waiting');
             }
-
-            $(this).addClass('btn-success');
-            $(this).removeClass('btn-primary');
-            $(this).text('- El paciente mayor');
-
-        } else {
-            $('tbody tr').each(function(){
-                $(this).removeClass('d-none');
-                $(this).addClass('waiting');
-            });
-
-            $(this).addClass('btn-primary');
-            $(this).removeClass('btn-success');
-            $(this).text('El paciente mayor');
         }
-    });
 
-}, 300);
+        $(this).addClass('btn-success');
+        $(this).removeClass('btn-primary');
+        $(this).text('- El paciente mayor');
+
+    } else {
+        $('tbody tr').each(function(){
+            $(this).removeClass('d-none');
+            $(this).addClass('waiting');
+        });
+
+        $(this).addClass('btn-primary');
+        $(this).removeClass('btn-success');
+        $(this).text('El paciente mayor');
+    }
+});
 
 function attend_patient(hospital_id){
     let row     = $('tbody').children('.waiting').eq(0).children();
@@ -64,7 +56,7 @@ function attend_patient(hospital_id){
             Swal.fire({
                 icon: 'info',
                 title: 'Sin consultas ' + response.type + ' disponibles ',
-                text: 'Se ha derivado el paciente a la sala de pendientes',
+                text: 'Se ha derivado el paciente a la sala de espera',
             
             }).then(()=>{
                 $( eval('"#row_' + row.eq(0).html() + '"') ).remove();
@@ -78,17 +70,18 @@ function attend_patient(hospital_id){
             $('#patient_category').html(    row.eq(3).html() );
             $('#patient_priority').html(    row.eq(4).html() );
             $('#patient_risk').html(        row.eq(5).html() );
+            $('#record_type').html(         response.type    );
 
             $('#record_id').empty();
 
-            response.records.forEach(element => {
+            $.each( response.records, function(key, element){
                 let option  = $('<option></option>', {
                     value:  element.id,
                     text:   element.professional,
                 });
 
                 $('#record_id').append(option);
-            });
+            });              
 
             $('#attendPatientModal').modal({
                 backdrop:   'static',
@@ -120,9 +113,6 @@ function attend_pending_patients(hospital_id){
                 title: 'Sin consultas ' + response.type + ' disponibles ',
                 text: 'Aún no hay consultas disponibles para atender al paciente',
             
-            }).then(()=>{
-                $( eval('"#row_' + row.eq(0).html() + '"') ).remove();
-
             });
 
         } else {
@@ -132,13 +122,11 @@ function attend_pending_patients(hospital_id){
             $('#patient_category').html(    row.eq(3).html() );
             $('#patient_priority').html(    row.eq(4).html() );
             $('#patient_risk').html(        row.eq(5).html() );
+            $('#record_type').html(         response.type    );
 
             $('#record_id').empty();
 
-
-
-            $.each( response.records, function(element){
-                console.log(element);
+            $.each( response.records, function(key, element){
                 let option  = $('<option></option>', {
                     value:  element.id,
                     text:   element.professional,

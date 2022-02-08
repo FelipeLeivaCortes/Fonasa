@@ -72,8 +72,9 @@ class RecordController extends Controller
     {
         $hospitals  = Hospital::all();
         $types      = [Record::TYPE_PEDIATRIA, Record::TYPE_URGENCIA, Record::TYPE_CGI];
+        $states     = [Record::STATE_AVAILABLE, Record::STATE_OCUPPED];
 
-        return view('records.edit', compact('hospitals', 'types', 'record'));
+        return view('records.edit', compact('hospitals', 'types', 'states', 'record'));
     }
 
     /**
@@ -89,6 +90,7 @@ class RecordController extends Controller
             'hospital_id'   => 'required',
             'professional'  => ['required', 'regex:/^[a-zA-ZÑñ\s]+$/'],
             'type'          => 'required|string',
+            'state'         => 'required|string',
         ]);
 
         $record->update($request->all());
@@ -113,7 +115,7 @@ class RecordController extends Controller
         $records    = Record::all()->where('state', Record::STATE_OCUPPED);
 
         foreach ( $records as $record ) {
-            $record->update(['state' => Record::STATE_AWAITING]);
+            $record->update(['state' => Record::STATE_AVAILABLE]);
         }
 
         return redirect()->route('admin.records.index')->with('success', 'Se han liberado todas las consultas exitosamente');

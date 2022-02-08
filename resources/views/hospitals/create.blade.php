@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Hospital')
+@section('title', 'Agregar Hospital')
 
 @section('content_header')
     <h1>Agregar Hospital</h1>
@@ -16,7 +16,7 @@
                 @include('hospitals.partials.form')
 
                 <div class="d-flex justify-content-center mt-5">
-                    <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-plus"></i> Agregar Usuario</button>
+                    <button type="submit" class="btn btn-primary mr-2">Agregar</button>
                     <a href="{{route('admin.hospitals.index')}}" class="btn btn-danger">Volver</a>
                 </div>
             {!! Form::close() !!}

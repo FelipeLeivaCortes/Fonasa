@@ -46,8 +46,9 @@ return [
     */
 
     'logo' => '<b>Sistema</b> Fonasa',
-    'logo_img' => 'images/fonasa_logo.jpg',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    // 'logo_img' => 'images/fonasa_logo.jpg',
+    'logo_img' => 'images/fonasa.png',
+    'logo_img_class' => 'brand-image-xs mr-1 img-rounded',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => '',
@@ -188,7 +189,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'https://www.fonasa.cl',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -229,7 +230,7 @@ return [
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type'         => 'fullscreen-widget',

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Crear Consulta')
+@section('title', 'Agregar Consulta')
 
 @section('content_header')
     <h1>Agregar Consulta</h1>
@@ -16,7 +16,7 @@
                 @include('records.partials.form')
 
                 <div class="d-flex justify-content-center mt-5">
-                    <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-plus"></i> Agregar Consulta</button>
+                    <button type="submit" class="btn btn-primary mr-2">Agregar</button>
                     <a href="{{route('admin.records.index')}}" class="btn btn-danger">Volver</a>
                 </div>
             {!! Form::close() !!}

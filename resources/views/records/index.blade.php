@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Consultas')
+@section('title', 'Consultas Registradas')
 
 @section('content_header')
     <h1>Consultas Registradas</h1>
@@ -11,9 +11,9 @@
 
     <div class="card">
         <div class="card-header">
-            <a href="{{route('admin.records.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar Consulta</a>
-            <a href="{{route('admin.records.unlock')}}" class="btn btn-primary"><i class="fas fa-unlock"></i> Liberar Consultas</a>
-            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#maxPatientsModal"><i class="fas fa-search"></i> Consulta con más pacientes</button>
+            <a href="{{route('admin.records.create')}}" class="btn btn-primary btn-sm mr-2">Agregar</a>
+            <a href="{{route('admin.records.unlock')}}" class="btn btn-primary btn-sm mr-2">Liberar Consultas</a>
+            <button class="btn btn-primary mr-2 btn-sm" data-toggle="modal" data-target="#maxPatientsModal">Consulta con más pacientes</button>
         </div>
 
         <div class="card-body">
@@ -41,7 +41,7 @@
                                 <a href="{{route('admin.records.edit', $record)}}" class="btn btn-info btn-sm">Editar</a>
                             </td>
                             <td width="10px">
-                                {!! Form::open(['route' => ['admin.records.destroy', $record], 'class' => 'confirm_action']) !!}
+                                {!! Form::open(['route' => ['admin.records.destroy', $record], 'class' => 'delete_record']) !!}
                                 @method('delete')
                                     {!! Form::submit('Eliminar', ['class' => 'btn btn-danger btn-sm']) !!}
                                 {!! Form::close() !!}
@@ -63,7 +63,7 @@
             {!! Form::open(['route' => 'admin.records.max_patients']) !!}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Filtrar consultas con más pacientes atendidos</h5>
+                        <h5 class="modal-title">Buscar consultas con más pacientes atendidos</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -91,6 +91,6 @@
     </div>
 @stop
 
-@section('js')
-    <script src="{{asset('js/confirm_action.js')}}"></script>
+@section('js_custom')
+    <script src="{{asset('js/confirm_actions.js')}}"></script>
 @stop

@@ -11,7 +11,7 @@
 
     <div class="card">
         <div class="card-header">
-            <a href="{{route('admin.patients.create')}}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Registrar Paciente</a>
+            <a href="{{route('admin.patients.create')}}" class="btn btn-primary btn-sm">Registrar</a>
         </div>
 
         <div class="card-body">
@@ -22,6 +22,7 @@
                         <th>Nombre</th>
                         <th>Edad</th>
                         <th>Categoria</th>
+                        <th>Estado</th>
                         <th colspan="3">Hospital</th>
                     </tr>
                 </thead>
@@ -32,6 +33,7 @@
                             <td>{{$patient->name}}</td>
                             <td>{{$patient->age}}</td>
                             <td>{{$patient->category_name()}}</td>
+                            <td>{{$patient->state}}</td>
                             <td>{{$patient->hospital->name}}</td>
                             <td width="10px">
                                 <a href="{{route('admin.patients.edit', $patient)}}" class="btn btn-info btn-sm">Editar</a>
@@ -45,7 +47,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">No se han encontrado pacientes registrados</td>
+                            <td colspan="6">No se han encontrado pacientes registrados</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -55,5 +57,5 @@
 @stop
 
 @section('js')
-    <script src="{{asset('js/confirm_action.js')}}"></script>
+    <script src="{{asset('js/confirm_actions.js')}}"></script>
 @stop
